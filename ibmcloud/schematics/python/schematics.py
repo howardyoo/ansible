@@ -8,12 +8,14 @@ def GetSchematicsService() :
 def ListWorkspaces() :
     service = GetSchematicsService()
     response = service.list_workspaces()
-    print(response.result)
+    print(response)
 
 def main() :
     iam_api_key = sys.argv[1]
     os.environ["SCHEMATICS_APIKEY"] = iam_api_key
     os.environ["SCHEMATICS_URL"] = 'https://schematics.cloud.ibm.com'
+    print("===== LISTING WORKSPACES =====")
     ListWorkspaces()
+    print("===== END =====")
 
 main()
