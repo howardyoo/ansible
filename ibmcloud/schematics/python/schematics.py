@@ -38,8 +38,11 @@ def ListWorkspaces() :
                 inactive_workspaces = inactive_workspaces+1
                 print(f"[DELETING INACTIVE] {workspace['id']} / {workspace['name']} ...")
                 refresh_token = GetRefreshToken()
-                delete_response = service.delete_workspace(refresh_token=refresh_token, w_id=workspace['id'], destroy_resources='true')
-                print(delete_response)
+                if refresh_token is not None:
+                    delete_response = service.delete_workspace(refresh_token=refresh_token, w_id=workspace['id'], destroy_resources='true')
+                    print(delete_response)
+                else:
+                    print("refresh_token was not available, thus skipping delete_workspace..")
             if workspace['status'] == "ACTIVE":
                 active_workspaces = active_workspaces+1
         print(f"active workspaces: {active_workspaces}, inactive workspaces: {inactive_workspaces}")
