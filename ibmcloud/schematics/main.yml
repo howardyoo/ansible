@@ -5,3 +5,5 @@
   tasks:
     - name: execute python script
       command: /usr/bin/python3 python/schematics.py {{ IAM_API_KEY }}
+      register: output
+    - debug: msg="{{ output.stdout_lines }}"
