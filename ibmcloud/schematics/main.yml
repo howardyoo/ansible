@@ -4,4 +4,4 @@
   hosts: localhost
   tasks:
     - name: execute python script
-      script: python/schematics.py
+      command: python python/schematics.py
