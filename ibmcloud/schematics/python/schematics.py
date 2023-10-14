@@ -11,14 +11,14 @@ def GetRefreshToken() :
         "Content-Type": "application/x-www-form-urlencoded"
     }
     data = {
-        "grant_type": f"urn:ibm:params:oauth:grant-type:apikey&apikey={api_token}",
+        "grant_type": "urn:ibm:params:oauth:grant-type:apikey",
+        "apikey" : f"{api_token}",
         "user": "bx:bx"
     }
     try:
         response = requests.post(url, headers=headers, data=data)
-        print(response)
         if response.status_code == 200:
-            refresh_token = response.result['access_token']
+            refresh_token = response.json().get('access_token')
     except requests.exceptions.RequestException as e:
         print("Error:", e)
     return refresh_token
