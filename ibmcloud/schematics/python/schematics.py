@@ -9,14 +9,14 @@ def ListWorkspaces() :
     service = GetSchematicsService()
     response = service.list_workspaces()
     if response.status_code == 200:
-        workspaces = response.result.workspaces
+        workspaces = response.result['workspaces']
         inactive_workspaces = 0
         active_workspaces = 0
         for workspace in workspaces:
-            if workspace.status == "INACTIVE" and workspace.last_action_name == "DESTROY":
+            if workspace['status'] == "INACTIVE" and workspace['last_action_name'] == "DESTROY":
                 inactive_workspaces = inactive_workspaces+1
-                print(f"[INACTIVE] {workspace.id} / {workspace.name}")
-            if workspace.status == "ACTIVE":
+                print(f"[INACTIVE] {workspace['id']} / {workspace['name']}")
+            if workspace['status'] == "ACTIVE":
                 active_workspaces = active_workspaces+1
         print(f"active workspaces: {active_workspaces}, inactive workspaces: {inactive_workspaces}")
 
