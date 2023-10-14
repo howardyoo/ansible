@@ -1,6 +1,26 @@
 from ibm_schematics.schematics_v1 import *
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 import sys, os
+import requests
+
+def GetRefreshToken() :
+    api_token = os.environ["SCHEMATICS_APIKEY"]
+    refresh_token = None
+    url = "https://iam.cloud.ibm.com/identity/token"
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    data = {
+        "grant_type": f"urn:ibm:params:oauth:grant-type:apikey&apikey={api_token}",
+        "user": "bx:bx"
+    }
+    try:
+        response = requests.post(url, headers=headers, data=data)
+        if response.status_code == 200:
+            refresh_token = response.result['access_token']
+    except requests.exceptions.RequestException as e:
+        print("Error:", e)
+    return refresh_token
 
 def GetSchematicsService() :
     return SchematicsV1.new_instance()
@@ -15,8 +35,10 @@ def ListWorkspaces() :
         for workspace in workspaces:
             if workspace['status'] == "INACTIVE" and workspace['last_action_name'] == "DESTROY":
                 inactive_workspaces = inactive_workspaces+1
-                print(f"[DELETING INACTIVE] {workspace['id']} / {workspace['name']}")
-                service.delete_workspace(w_id=workspace['id'])
+                print(f"[DELETING INACTIVE] {workspace['id']} / {workspace['name']} ...")
+                refresh_token = GetRefreshToken()
+                delete_response = service.delete_workspace(refresh_token=refresh_token, w_id=workspace['id'], destroy_resources='true')
+                print(delete_response)
             if workspace['status'] == "ACTIVE":
                 active_workspaces = active_workspaces+1
         print(f"active workspaces: {active_workspaces}, inactive workspaces: {inactive_workspaces}")
