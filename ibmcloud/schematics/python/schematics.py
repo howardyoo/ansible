@@ -12,8 +12,7 @@ def GetRefreshToken() :
     }
     data = {
         "grant_type": "urn:ibm:params:oauth:grant-type:apikey",
-        "apikey" : f"{api_token}",
-        "user": "bx:bx"
+        "apikey" : f"{api_token}"
     }
     try:
         response = requests.post(url, headers=headers, data=data)
