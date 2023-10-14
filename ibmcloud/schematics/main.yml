@@ -4,4 +4,4 @@
   hosts: localhost
   tasks:
     - name: execute python script
-      command: /usr/bin/python3 python/schematics.py
+      command: /usr/bin/python3 python/schematics.py {{ IAM_API_KEY }}
