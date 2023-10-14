@@ -16,6 +16,7 @@ def GetRefreshToken() :
     }
     try:
         response = requests.post(url, headers=headers, data=data)
+        print(response)
         if response.status_code == 200:
             refresh_token = response.result['access_token']
     except requests.exceptions.RequestException as e:
