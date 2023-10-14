@@ -1,4 +1,4 @@
-from ibm_platform_services.schematics_v1 import *
+from ibm_schematics.schematics_v1 import *
 
 
 def GetSchematicsService() :
