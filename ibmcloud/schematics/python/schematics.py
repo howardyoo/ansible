@@ -2,13 +2,17 @@ from ibm_schematics.schematics_v1 import *
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 import sys, os
 import requests
+import base64
 
 def GetRefreshToken() :
     api_token = os.environ["SCHEMATICS_APIKEY"]
     refresh_token = None
+    auth_string = "bx:bx"
+    auth_header = base64.b64encode(auth_string.encode()).decode()
     url = "https://iam.cloud.ibm.com/identity/token"
     headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": f"Basic {auth_header}"
     }
     data = {
         "grant_type": "urn:ibm:params:oauth:grant-type:apikey",
@@ -17,7 +21,7 @@ def GetRefreshToken() :
     try:
         response = requests.post(url, headers=headers, data=data)
         if response.status_code == 200:
-            refresh_token = response.json().get('access_token')
+            refresh_token = response.json().get('refresh_token')
     except requests.exceptions.RequestException as e:
         print("Error:", e)
     return refresh_token
