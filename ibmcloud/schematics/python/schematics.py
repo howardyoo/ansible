@@ -5,7 +5,7 @@ def GetSchematicsService() :
     return SchematicsV1.new_instance()
 
 def ListWorkspaces() :
-    service = GetSchematicService()
+    service = GetSchematicsService()
     response = service.list_workspaces()
     print(response.result)
 
