@@ -1,0 +1,6 @@
+---
+# ansible-playbook main.yml
+- name: schematics test
+  tasks:
+    - name: execute python script
+      script: python/schematics.py
