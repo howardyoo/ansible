@@ -34,9 +34,9 @@ def ListWorkspaces() :
         deleted_workspaces = 0
         active_workspaces = 0
         for workspace in workspaces:
-            if workspace['status'] == "INACTIVE" and workspace['last_action_name'] == "DESTROY":
+            if workspace['status'] == "FAILED" or workspace['status'] == "INACTIVE":
                 inactive_workspaces = inactive_workspaces+1
-                print(f"[DELETING INACTIVE] {workspace['id']} / {workspace['name']} ...")
+                print(f"[DELETING {workspace['status']}] {workspace['id']} / {workspace['name']} ...")
                 refresh_token = GetRefreshToken()
                 if refresh_token is not None:
                     delete_response = service.delete_workspace(refresh_token=refresh_token, w_id=workspace['id'], destroy_resources='true')
@@ -47,7 +47,7 @@ def ListWorkspaces() :
                     print("refresh_token was not available, thus skipping deletion.")
             if workspace['status'] == "ACTIVE":
                 active_workspaces = active_workspaces+1
-        print(f"active workspaces: {active_workspaces}, inactive workspaces: {inactive_workspaces}, deleted workspaces: {deleted_workspaces}")
+        print(f"active workspaces: {active_workspaces}, inactive/failed workspaces: {inactive_workspaces}, deleted workspaces: {deleted_workspaces}")
 
 def main() :
     iam_api_key = sys.argv[1]
